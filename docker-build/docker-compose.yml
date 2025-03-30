@@ -9,9 +9,17 @@ services:
     volumes:
       - ./output:/output
     command: >
-      bash -c "cp /build/umdoc/build-linux/umdoc /output/umdoc-linux &&
-              cp /build/umdoc/build-windows/umdoc.exe /output/umdoc-windows.exe &&
-              echo 'Build completed. Executables copied to output directory.'"
+      bash -c "mkdir -p /output && 
+              if [ -f /build/umdoc/build-linux/umdoc ]; then 
+                cp /build/umdoc/build-linux/umdoc /output/umdoc-linux && 
+                echo 'Linux executable copied to output directory.'; 
+              fi && 
+              if [ -f /build/umdoc/build-windows/umdoc.exe ]; then 
+                cp /build/umdoc/build-windows/umdoc.exe /output/umdoc-windows.exe && 
+                echo 'Windows executable copied to output directory.'; 
+              else 
+                echo 'Warning: Windows build failed, but Linux build may be available.'; 
+              fi"
 
   # Linux-only builder
   linux-builder:

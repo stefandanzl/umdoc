@@ -101,8 +101,11 @@ For users who prefer using make, a Makefile is provided with common operations:
 # Build both Linux and Windows executables
 make
 
-# Build only the Linux executable
+# Build only the Linux executable (requires Docker Compose)
 make linux
+
+# Build only the Linux executable without using Docker Compose (fallback option)
+make linux-only
 
 # Build only the Windows executable
 make windows

@@ -1,7 +1,11 @@
-.PHONY: all setup linux windows clean shell
+.PHONY: all setup linux windows clean shell linux-only
 
 all: setup
 	docker-compose up --build
+
+linux-only: setup
+	docker build -f Dockerfile.linux -t umdoc-builder-linux .
+	docker run --rm -v "$(shell pwd)/output:/output" umdoc-builder-linux bash -c "cp /build/umdoc/build-linux/umdoc /output/umdoc-linux && echo 'Linux executable copied to output directory.'"
 
 setup:
 	mkdir -p output cmake
