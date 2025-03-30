@@ -8,8 +8,8 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
-SOURCE_DIR="$1"
-TARGET_DIR="$2"
+SOURCE_DIR="$1"||${SOURCE_DIR}
+TARGET_DIR="$2"||${TARGET_DIR}
 
 # Create output directory if it doesn't exist
 mkdir -p "$TARGET_DIR"
