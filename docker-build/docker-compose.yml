@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Default builder for both platforms
+  umdoc-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/output
+    command: >
+      bash -c "cp /build/umdoc/build-linux/umdoc /output/umdoc-linux &&
+              cp /build/umdoc/build-windows/umdoc.exe /output/umdoc-windows.exe &&
+              echo 'Build completed. Executables copied to output directory.'"
+
+  # Linux-only builder
+  linux-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/output
+    command: >
+      bash -c "cp /build/umdoc/build-linux/umdoc /output/umdoc-linux &&
+              echo 'Linux build completed. Executable copied to output directory.'"
+    profiles: ["linux-only"]
+
+  # Windows-only builder
+  windows-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/output
+    command: >
+      bash -c "cp /build/umdoc/build-windows/umdoc.exe /output/umdoc-windows.exe &&
+              echo 'Windows build completed. Executable copied to output directory.'"
+    profiles: ["windows-only"]
+    
+  # Interactive shell for debugging
+  shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./output:/output
+    command: bash
+    stdin_open: true
+    tty: true
+    profiles: ["debug"]
