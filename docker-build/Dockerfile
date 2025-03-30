@@ -10,9 +10,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     g++ \
     mingw-w64 \
-    mingw-w64-tools \
-    mingw-w64-common \
-    mingw-w64-x86-64-dev \
+    clang \
+    lld \
+    llvm \
+    msitools \
+    wine64 \
+    wine64-tools \
+    wine64-preloader \
     texlive-xetex \
     texlive-fonts-extra \
     curl \
@@ -30,6 +34,11 @@ COPY cmake/mingw-w64-x86_64.cmake /build/cmake/mingw-w64-x86_64.cmake
 RUN git clone https://github.com/craflin/umdoc.git && \
     cd umdoc && \
     git submodule update --init
+
+# Copy and apply patches for cross-compilation
+COPY crossbuild-patch.sh /build/
+RUN chmod +x /build/crossbuild-patch.sh && \
+    /build/crossbuild-patch.sh
 
 # Build for Linux
 RUN mkdir -p /build/umdoc/build-linux && \
